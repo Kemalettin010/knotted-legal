@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Join a party in Knotted!</title>
+<meta name="description" content="Open your friend's party in Knotted!">
+<style>
+  :root { --bg: #0c1e1a; --card: #14342c; --text: #fff2cf; --muted: #9fb8ae; --mint: #6bdaca; --gold: #ffbb37; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+         background: var(--bg); color: var(--text); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; padding: 16px; }
+  main { width: 100%; max-width: 420px; background: var(--card); border-radius: 20px; padding: 28px 24px; text-align: center; }
+  h1 { margin: 0 0 6px; font-size: 26px; }
+  p { margin: 6px 0; color: var(--muted); }
+  .code { margin: 18px 0; font-size: 40px; letter-spacing: 8px; font-weight: 800; color: var(--gold); }
+  a.button, button { display: block; width: 100%; margin: 10px 0; padding: 14px; border-radius: 12px; border: 0;
+         font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; }
+  .primary { background: var(--gold); color: #09272d; }
+  .secondary { background: #1f4a3e; color: var(--text); }
+  small { display: block; margin-top: 14px; color: var(--muted); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Join the party</h1>
+  <p>Your friend invited you to play Knotted!</p>
+  <div class="code" id="code">------</div>
+  <a class="button primary" id="open" href="#">Open in Knotted!</a>
+  <button class="secondary" id="copy" type="button">Copy code</button>
+  <a class="button secondary" href="https://apps.apple.com/app/id6814015907">Get it on the App Store</a>
+  <a class="button secondary" href="https://play.google.com/store/apps/details?id=com.kbhservices.knotted">Get it on Google Play</a>
+  <small>No app yet? Install it, open the party screen, choose JOIN A PARTY and enter the code.</small>
+</main>
+<script>
+  // The code is six letters or digits; anything else is ignored.
+  var raw = new URLSearchParams(location.search).get("code") || "";
+  var code = raw.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6);
+  document.getElementById("code").textContent = code || "------";
+  var deepLink = "knotted://join?code=" + encodeURIComponent(code);
+  var open = document.getElementById("open");
+  open.href = deepLink;
+  document.getElementById("copy").addEventListener("click", function () {
+    if (navigator.clipboard) navigator.clipboard.writeText(code);
+    this.textContent = "Code copied";
+  });
+  // Try the app straight away; if it is not installed, the page simply stays.
+  if (code.length === 6) setTimeout(function () { location.href = deepLink; }, 300);
+</script>
+</body>
+</html>
